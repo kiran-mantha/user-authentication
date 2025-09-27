@@ -166,3 +166,8 @@ The core of the access control lies in the custom `HasAPIPermission` class.
 - Ensure refresh token blacklisting is enabled (install `rest_framework_simplejwt.token_blacklist`).  
 - For logout, handle missing refresh token gracefully.  
 - Use tools like Postman or curl to test each endpoint.
+
+---
+
+## 📄 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
