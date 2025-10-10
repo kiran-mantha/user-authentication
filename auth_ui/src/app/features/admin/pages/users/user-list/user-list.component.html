@@ -1,0 +1,149 @@
+<div class="user-list-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">User Management</h1>
+      <p class="page-subtitle">Manage system users and their permissions</p>
+    </div>
+    <button class="create-button" (click)="createUser()">
+      <span class="button-icon">➕</span>
+      <span class="button-text">Create User</span>
+    </button>
+  </div>
+
+  <div class="filters-section">
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search users..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange($event)"
+      />
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-alert">
+    <span class="error-icon">⚠️</span>
+    <span class="error-text">{{ errorMessage }}</span>
+  </div>
+
+  <div class="table-container">
+    <div *ngIf="isLoading" class="loading-overlay">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Loading users...</p>
+    </div>
+
+    <table class="users-table" *ngIf="!isLoading">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Full Name</th>
+          <th>Roles</th>
+          <th>Status</th>
+          <th>Date Joined</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td class="username-cell">
+            <span class="username">{{ user.username }}</span>
+          </td>
+          <td class="email-cell">
+            <span class="email">{{ user.email }}</span>
+          </td>
+          <td class="name-cell">
+            <span class="full-name">{{ user.first_name }} {{ user.last_name }}</span>
+          </td>
+          <td class="roles-cell">
+            <span class="roles">{{ getUserRoles(user) }}</span>
+          </td>
+          <td class="status-cell">
+            <span class="status-badge" [class.active]="user.is_active" [class.inactive]="!user.is_active">
+              {{ user.is_active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td class="date-cell">
+            <span class="date">{{ user.date_joined | date:'medium' }}</span>
+          </td>
+          <td class="actions-cell">
+            <div class="action-buttons">
+              <button class="edit-button" (click)="editUser(user)" title="Edit user">
+                <span class="button-icon">✏️</span>
+              </button>
+              <button 
+                class="toggle-button" 
+                (click)="toggleUserStatus(user)"
+                [class.deactivate]="user.is_active"
+                [class.activate]="!user.is_active"
+                [title]="user.is_active ? 'Deactivate user' : 'Activate user'"
+              >
+                <span class="button-icon">{{ user.is_active ? '🔴' : '🟢' }}</span>
+              </button>
+              <button class="delete-button" (click)="deleteUser(user)" title="Delete user">
+                <span class="button-icon">🗑️</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!isLoading && users.length === 0" class="empty-state">
+      <div class="empty-icon">👥</div>
+      <h3 class="empty-title">No users found</h3>
+      <p class="empty-description">No users match your search criteria.</p>
+    </div>
+  </div>
+
+  <div class="pagination-section" *ngIf="!isLoading && totalUsers > 0">
+    <div class="pagination-info">
+      <span class="info-text">
+        Showing {{ (currentPage - 1) * pageSize + 1 }} - {{ Math.min(currentPage * pageSize, totalUsers) }} of {{ totalUsers }} users
+      </span>
+    </div>
+    
+    <div class="pagination-controls">
+      <button 
+        class="pagination-button prev" 
+        (click)="onPageChange(currentPage - 1)"
+        [disabled]="currentPage === 1"
+      >
+        <span class="button-icon">◀️</span>
+        <span class="button-text">Previous</span>
+      </button>
+
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of pageNumbers"
+          class="page-button"
+          [class.active]="page === currentPage"
+          (click)="onPageChange(page)"
+        >
+          {{ page }}
+        </button>
+      </div>
+
+      <button 
+        class="pagination-button next" 
+        (click)="onPageChange(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+      >
+        <span class="button-text">Next</span>
+        <span class="button-icon">▶️</span>
+      </button>
+    </div>
+
+    <div class="page-size-selector">
+      <label for="pageSize">Show:</label>
+      <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange($event)">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+  </div>
+</div>

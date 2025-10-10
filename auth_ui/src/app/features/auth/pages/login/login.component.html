@@ -1,0 +1,31 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1 class="login-title">Authentication System</h1>
+      <p class="login-subtitle">Sign in to access your account</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-alert">
+      <span class="error-icon">⚠️</span>
+      <span class="error-text">{{ errorMessage }}</span>
+    </div>
+
+    <div class="login-content">
+      <app-login-form
+        (loginSubmit)="onLogin($event)"
+        *ngIf="!isLoading"
+      ></app-login-form>
+
+      <div *ngIf="isLoading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Signing in...</p>
+      </div>
+    </div>
+
+    <div class="login-footer">
+      <p class="footer-text">
+        Secure authentication powered by Django + JWT
+      </p>
+    </div>
+  </div>
+</div>

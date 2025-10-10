@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  angular-auth-ui:
+    build: .
+    ports:
+      - "4200:80"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
+    networks:
+      - auth-network
+
+  backend:
+    # This would be your Django backend
+    # Uncomment and configure as needed
+    # image: your-django-backend:latest
+    # ports:
+    #   - "8000:8000"
+    # environment:
+    #   - DEBUG=False
+    #   - SECRET_KEY=your-secret-key
+    # networks:
+    #   - auth-network
+    
+    # For demo purposes, we'll use a simple mock server
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./mock-backend:/usr/share/nginx/html
+    networks:
+      - auth-network
+
+  nginx-proxy:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-proxy.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - angular-auth-ui
+      - backend
+    networks:
+      - auth-network
+
+networks:
+  auth-network:
+    driver: bridge

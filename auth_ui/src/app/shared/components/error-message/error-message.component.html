@@ -1,0 +1,18 @@
+<div class="error-container" [class]="'type-' + type">
+  <div class="error-header">
+    <span class="error-icon">{{ getIcon() }}</span>
+    <h3 class="error-title">{{ title }}</h3>
+    <button class="dismiss-button" (click)="onDismiss()" *ngIf="type !== 'error'">✕</button>
+  </div>
+  
+  <div class="error-content">
+    <p class="error-message">{{ message }}</p>
+  </div>
+  
+  <div class="error-actions" *ngIf="showRetry">
+    <button class="retry-button" (click)="onRetry()">
+      <span class="button-icon">🔄</span>
+      Try Again
+    </button>
+  </div>
+</div>

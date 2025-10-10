@@ -1,0 +1,145 @@
+<div class="user-edit-container">
+  <div class="page-header">
+    <h1 class="page-title">Edit User</h1>
+    <p class="page-subtitle">Update user information and roles</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-alert">
+    <span class="error-icon">⚠️</span>
+    <span class="error-text">{{ errorMessage }}</span>
+  </div>
+
+  <div class="form-container" *ngIf="!isLoading">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="user-form">
+      <!-- Basic Information -->
+      <div class="form-section">
+        <h2 class="section-title">Basic Information</h2>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="username" class="form-label">Username *</label>
+            <input
+              type="text"
+              id="username"
+              formControlName="username"
+              class="form-input"
+              placeholder="Enter username"
+              [class.error]="username?.invalid && username?.touched"
+            />
+            <div *ngIf="username?.invalid && username?.touched" class="error-message">
+              <span *ngIf="username?.errors?.['required']">Username is required</span>
+              <span *ngIf="username?.errors?.['minlength']">Username must be at least 3 characters</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email *</label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              class="form-input"
+              placeholder="Enter email"
+              [class.error]="email?.invalid && email?.touched"
+            />
+            <div *ngIf="email?.invalid && email?.touched" class="error-message">
+              <span *ngIf="email?.errors?.['required']">Email is required</span>
+              <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="first_name" class="form-label">First Name *</label>
+            <input
+              type="text"
+              id="first_name"
+              formControlName="first_name"
+              class="form-input"
+              placeholder="Enter first name"
+              [class.error]="first_name?.invalid && first_name?.touched"
+            />
+            <div *ngIf="first_name?.invalid && first_name?.touched" class="error-message">
+              <span *ngIf="first_name?.errors?.['required']">First name is required</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="last_name" class="form-label">Last Name *</label>
+            <input
+              type="text"
+              id="last_name"
+              formControlName="last_name"
+              class="form-input"
+              placeholder="Enter last name"
+              [class.error]="last_name?.invalid && last_name?.touched"
+            />
+            <div *ngIf="last_name?.invalid && last_name?.touched" class="error-message">
+              <span *ngIf="last_name?.errors?.['required']">Last name is required</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Section -->
+      <div class="form-section">
+        <h2 class="section-title">Account Status</h2>
+        
+        <div class="form-group">
+          <label class="status-checkbox">
+            <input
+              type="checkbox"
+              formControlName="is_active"
+            />
+            <span class="checkmark"></span>
+            <span class="status-label">Active Account</span>
+            <span class="status-description">User can login and access the system</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Roles Section -->
+      <div class="form-section">
+        <h2 class="section-title">Roles</h2>
+        
+        <div class="form-group">
+          <label class="form-label">Assign Roles</label>
+          <div class="roles-container">
+            <label *ngFor="let role of roles" class="role-checkbox">
+              <input
+                type="checkbox"
+                [value]="role.id"
+                [checked]="rolesControl.value?.includes(role.id)"
+                (change)="onRoleToggle(role.id, $event)"
+              />
+              <span class="checkmark"></span>
+              <span class="role-name">{{ role.name }}</span>
+              <span class="role-description">{{ role.description }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="cancel-button" (click)="onCancel()">
+          Cancel
+        </button>
+        <button 
+          type="submit" 
+          class="submit-button"
+          [disabled]="userForm.invalid || isSubmitting"
+        >
+          <span *ngIf="!isSubmitting">Update User</span>
+          <span *ngIf="isSubmitting">Updating...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Loading user data...</p>
+  </div>
+</div>

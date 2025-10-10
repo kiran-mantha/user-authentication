@@ -1,0 +1,24 @@
+<div class="unauthorized-container">
+  <div class="unauthorized-card">
+    <div class="error-icon">🚫</div>
+    <h1 class="error-title">Access Denied</h1>
+    <p class="error-message">
+      You don't have permission to access this page.
+    </p>
+    <p class="error-description">
+      Please contact your administrator if you believe this is an error.
+    </p>
+    
+    <div class="action-buttons">
+      <button class="dashboard-button" (click)="goToDashboard()">
+        <span class="button-icon">🏠</span>
+        <span class="button-text">Go to Dashboard</span>
+      </button>
+      
+      <button class="login-button" (click)="goToLogin()">
+        <span class="button-icon">🔑</span>
+        <span class="button-text">Login as Different User</span>
+      </button>
+    </div>
+  </div>
+</div>

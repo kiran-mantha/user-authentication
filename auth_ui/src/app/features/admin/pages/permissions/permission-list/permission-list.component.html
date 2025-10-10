@@ -1,0 +1,144 @@
+<div class="permission-list-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Permission Management</h1>
+      <p class="page-subtitle">Manage API permissions and access control</p>
+    </div>
+    <button class="create-button" (click)="createPermission()">
+      <span class="button-icon">➕</span>
+      <span class="button-text">Create Permission</span>
+    </button>
+  </div>
+
+  <div class="filters-section">
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search permissions..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange($event)"
+      />
+    </div>
+    
+    <div class="filter-container">
+      <label for="methodFilter">HTTP Method:</label>
+      <select id="methodFilter" [(ngModel)]="filterMethod" (change)="onMethodFilterChange($event.target.value)">
+        <option value="">All Methods</option>
+        <option *ngFor="let method of httpMethods" [value]="method">{{ method }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-alert">
+    <span class="error-icon">⚠️</span>
+    <span class="error-text">{{ errorMessage }}</span>
+  </div>
+
+  <div class="table-container">
+    <div *ngIf="isLoading" class="loading-overlay">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Loading permissions...</p>
+    </div>
+
+    <table class="permissions-table" *ngIf="!isLoading">
+      <thead>
+        <tr>
+          <th>Permission Name</th>
+          <th>Codename</th>
+          <th>Description</th>
+          <th>API Endpoint</th>
+          <th>HTTP Method</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let permission of permissions">
+          <td class="permission-name-cell">
+            <span class="permission-name">{{ permission.name }}</span>
+          </td>
+          <td class="codename-cell">
+            <span class="codename">{{ permission.codename }}</span>
+          </td>
+          <td class="description-cell">
+            <span class="description">{{ permission.description }}</span>
+          </td>
+          <td class="endpoint-cell">
+            <span class="endpoint">{{ permission.api_endpoint || 'N/A' }}</span>
+          </td>
+          <td class="method-cell">
+            <span class="method-badge" [class]="getMethodClass(permission.http_method)">
+              {{ permission.http_method || 'N/A' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <div class="action-buttons">
+              <button class="edit-button" (click)="editPermission(permission)" title="Edit permission">
+                <span class="button-icon">✏️</span>
+              </button>
+              <button class="delete-button" (click)="deletePermission(permission)" title="Delete permission">
+                <span class="button-icon">🗑️</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!isLoading && permissions.length === 0" class="empty-state">
+      <div class="empty-icon">🔐</div>
+      <h3 class="empty-title">No permissions found</h3>
+      <p class="empty-description">No permissions match your search criteria.</p>
+    </div>
+  </div>
+
+  <div class="pagination-section" *ngIf="!isLoading && totalPermissions > 0">
+    <div class="pagination-info">
+      <span class="info-text">
+        Showing {{ (currentPage - 1) * pageSize + 1 }} - {{ Math.min(currentPage * pageSize, totalPermissions) }} of {{ totalPermissions }} permissions
+      </span>
+    </div>
+    
+    <div class="pagination-controls">
+      <button 
+        class="pagination-button prev" 
+        (click)="onPageChange(currentPage - 1)"
+        [disabled]="currentPage === 1"
+      >
+        <span class="button-icon">◀️</span>
+        <span class="button-text">Previous</span>
+      </button>
+
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of pageNumbers"
+          class="page-button"
+          [class.active]="page === currentPage"
+          (click)="onPageChange(page)"
+        >
+          {{ page }}
+        </button>
+      </div>
+
+      <button 
+        class="pagination-button next" 
+        (click)="onPageChange(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+      >
+        <span class="button-text">Next</span>
+        <span class="button-icon">▶️</span>
+      </button>
+    </div>
+
+    <div class="page-size-selector">
+      <label for="pageSize">Show:</label>
+      <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange($event.target.value)">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+  </div>
+</div>
