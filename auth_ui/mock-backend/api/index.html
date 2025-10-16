@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mock Backend API</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .endpoint { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .method { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+        .get { background: #4CAF50; color: white; }
+        .post { background: #2196F3; color: white; }
+        .put { background: #FF9800; color: white; }
+        .delete { background: #f44336; color: white; }
+        .patch { background: #9C27B0; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mock Backend API</h1>
+        <p>This is a mock backend for the Angular Authentication UI demo.</p>
+        <p>The actual API responses are simulated in the DemoInterceptor.</p>
+        
+        <h2>Available Endpoints</h2>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span> /api/users/ - List users
+        </div>
+        
+        <div class="endpoint">
+            <span class="method post">POST</span> /api/users/ - Create user
+        </div>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span> /api/users/{id}/ - Get user details
+        </div>
+        
+        <div class="endpoint">
+            <span class="method patch">PATCH</span> /api/users/{id}/ - Update user
+        </div>
+        
+        <div class="endpoint">
+            <span class="method delete">DELETE</span> /api/users/{id}/ - Delete user
+        </div>
+        
+        <div class="endpoint">
+            <span class="method post">POST</span> /api/login/ - User login
+        </div>
+        
+        <div class="endpoint">
+            <span class="method post">POST</span> /api/logout/ - User logout
+        </div>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span> /api/user/ - Current user profile
+        </div>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span> /api/roles/ - List roles
+        </div>
+        
+        <div class="endpoint">
+            <span class="method get">GET</span> /api/permissions/ - List permissions
+        </div>
+        
+        <h2>Demo Credentials</h2>
+        <ul>
+            <li><strong>Admin:</strong> admin / admin123</li>
+            <li><strong>Manager:</strong> manager / manager123</li>
+            <li><strong>User:</strong> user / user123</li>
+        </ul>
+        
+        <h2>Features</h2>
+        <ul>
+            <li>JWT Authentication with automatic token refresh</li>
+            <li>Role-based access control</li>
+            <li>User management (CRUD operations)</li>
+            <li>Role management with permission assignment</li>
+            <li>Permission management for API endpoints</li>
+            <li>Responsive design for mobile and desktop</li>
+            <li>Modern UI with loading states and error handling</li>
+        </ul>
+    </div>
+</body>
+</html>

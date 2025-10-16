@@ -1,0 +1,105 @@
+<div class="role-edit-container">
+  <div class="page-header">
+    <h1 class="page-title">Edit Role</h1>
+    <p class="page-subtitle">Update role information and permissions</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-alert">
+    <span class="error-icon">⚠️</span>
+    <span class="error-text">{{ errorMessage }}</span>
+  </div>
+
+  <div class="form-container" *ngIf="!isLoading">
+    <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="role-form">
+      <!-- Basic Information -->
+      <div class="form-section">
+        <h2 class="section-title">Role Information</h2>
+        
+        <div class="form-group">
+          <label for="name" class="form-label">Role Name *</label>
+          <input
+            type="text"
+            id="name"
+            formControlName="name"
+            class="form-input"
+            placeholder="Enter role name (e.g., Manager, Admin)"
+            [class.error]="name?.invalid && name?.touched"
+          />
+          <div *ngIf="name?.invalid && name?.touched" class="error-message">
+            <span *ngIf="name?.errors?.['required']">Role name is required</span>
+            <span *ngIf="name?.errors?.['minlength']">Role name must be at least 3 characters</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description" class="form-label">Description *</label>
+          <textarea
+            id="description"
+            formControlName="description"
+            class="form-input form-textarea"
+            placeholder="Describe what this role can do..."
+            rows="4"
+            [class.error]="description?.invalid && description?.touched"
+          ></textarea>
+          <div *ngIf="description?.invalid && description?.touched" class="error-message">
+            <span *ngIf="description?.errors?.['required']">Description is required</span>
+            <span *ngIf="description?.errors?.['minlength']">Description must be at least 10 characters</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Permissions Section -->
+      <div class="form-section" *ngIf="!isLoading">
+        <h2 class="section-title">Assign Permissions</h2>
+        
+        <div class="form-group">
+          <label class="form-label">Select Permissions</label>
+          <div class="permissions-container">
+            <div class="permission-category" *ngFor="let category of getPermissionCategories()">
+              <h3 class="category-title">{{ category }}</h3>
+              <div class="permissions-grid">
+                <label 
+                  *ngFor="let permission of getPermissionsByCategory(category)" 
+                  class="permission-checkbox"
+                >
+                  <input
+                    type="checkbox"
+                    [value]="permission.id"
+                    [checked]="permissionsControl.value?.includes(permission.id)"
+                    (change)="onPermissionToggle(permission.id, $event)"
+                  />
+                  <span class="checkmark"></span>
+                  <div class="permission-content">
+                    <span class="permission-name">{{ permission.name }}</span>
+                    <span class="permission-description">{{ permission.description }}</span>
+                    <span class="permission-endpoint">{{ permission.http_method }} {{ permission.api_endpoint }}</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="cancel-button" (click)="onCancel()">
+          Cancel
+        </button>
+        <button 
+          type="submit" 
+          class="submit-button"
+          [disabled]="roleForm.invalid || isSubmitting"
+        >
+          <span *ngIf="!isSubmitting">Update Role</span>
+          <span *ngIf="isSubmitting">Updating...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Loading role data...</p>
+  </div>
+</div>
